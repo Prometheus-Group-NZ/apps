@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Apps Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #fff;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #00d4ff, #7b2cbf, #ff9ff3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #a0a0a0;
+            margin-top: 10px;
+        }
+
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .app-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .app-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .app-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .app-title {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .app-desc {
+            color: #a0a0a0;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+
+        .app-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        .app-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4);
+        }
+
+        .app-card.pacman {
+            border-color: #ff6b6b;
+        }
+
+        .app-card.pacman .app-btn {
+            background: linear-gradient(90deg, #ff6b6b, #ee5a5a);
+        }
+
+        .app-card.racer {
+            border-color: #4ecdc4;
+        }
+
+        .app-card.racer .app-btn {
+            background: linear-gradient(90deg, #4ecdc4, #44a08c);
+        }
+
+        .app-card.draw {
+            border-color: #a855f7;
+        }
+
+        .app-card.draw .app-btn {
+            background: linear-gradient(90deg, #a855f7, #9333ea);
+        }
+
+        .app-card.placeholder {
+            border-color: #6b7280;
+            opacity: 0.7;
+        }
+
+        .app-card.placeholder .app-btn {
+            background: linear-gradient(90deg, #6b7280, #4b5563);
+            cursor: not-allowed;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+
+        .status-active {
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+        }
+
+        .status-soon {
+            background: rgba(255, 165, 0, 0.2);
+            color: #ffa500;
+        }
+
+        footer {
+            margin-top: 60px;
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.9rem;
+            padding: 20px;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .apps-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 My Apps Hub</h1>
+            <p class="subtitle">Explore my collection of web applications</p>
+        </header>
+
+        <div class="apps-grid">
+            <!-- Pacman App -->
+            <div class="app-card pacman" onclick="window.location.href='/pacman/index.html'">
+                <div class="app-icon">👻</div>
+                <h2 class="app-title">Pacman</h2>
+                <p class="app-desc">Classic arcade action! Eat dots, avoid ghosts, and score high points.</p>
+                <a href="/pacman/index.html" class="app-btn">Play Now</a>
+                <span class="status-badge status-active">● Active</span>
+            </div>
+
+            <!-- 2D Racer App -->
+            <div class="app-card racer" onclick="window.location.href='/2d-racer/index.html'">
+                <div class="app-icon">🏎️</div>
+                <h2 class="app-title">2D Racer</h2>
+                <p class="app-desc">80s arcade racing with shield boosts and multiple environments!</p>
+                <a href="/2d-racer/index.html" class="app-btn">Play Now</a>
+                <span class="status-badge status-active">● Active</span>
+            </div>
+
+            <!-- TopDraw App -->
+            <div class="app-card draw" onclick="window.location.href='/topdraw/index.html'">
+                <div class="app-icon">🎨</div>
+                <h2 class="app-title">TopDraw</h2>
+                <p class="app-desc">Creative drawing app with unlimited canvas and tools.</p>
+                <a href="/topdraw/index.html" class="app-btn">Open App</a>
+                <span class="status-badge status-active">● Active</span>
+            </div>
+
+            <!-- Placeholder 1 -->
+            <div class="app-card placeholder">
+                <div class="app-icon">📊</div>
+                <h2 class="app-title">Analytics</h2>
+                <p class="app-desc">Coming soon - Track your app usage and statistics.</p>
+                <button class="app-btn" disabled>Coming Soon</button>
+                <span class="status-badge status-soon">🔜 In Development</span>
+            </div>
+
+            <!-- Placeholder 2 -->
+            <div class="app-card placeholder">
+                <div class="app-icon">🎵</div>
+                <h2 class="app-title">Music Player</h2>
+                <p class="app-desc">Coming soon - Stream and manage your music library.</p>
+                <button class="app-btn" disabled>Coming Soon</button>
+                <span class="status-badge status-soon">🔜 In Development</span>
+            </div>
+
+            <!-- Placeholder 3 -->
+            <div class="app-card placeholder">
+                <div class="app-icon">📱</div>
+                <h2 class="app-title">Mobile Companion</h2>
+                <p class="app-desc">Coming soon - Companion app for all your devices.</p>
+                <button class="app-btn" disabled>Coming Soon</button>
+                <span class="status-badge status-soon">🔜 In Development</span>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2024 My Apps Hub | Built with ❤️ using vanilla HTML, CSS & JavaScript</p>
+        </footer>
+    </div>
+
+    <script>
+        // Add click tracking
+        document.querySelectorAll('.app-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                if (!this.querySelector('.app-btn').disabled) {
+                    console.log('App opened:', this.querySelector('.app-title').textContent);
+                }
+            });
+        });
+
+        // Add subtle floating animation to icons
+        document.querySelectorAll('.app-icon').forEach(icon => {
+            icon.style.animation = 'float 3s ease-in-out infinite';
+        });
+
+        // Add keyframes for floating animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes float {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-10px); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

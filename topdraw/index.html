@@ -1,56 +1,160 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Top Draw</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        darkMode: 'class',
-        theme: {
-          extend: {
-            colors: {
-              brand: {
-                50: '#f0f9ff',
-                100: '#e0f2fe',
-                500: '#0ea5e9',
-                600: '#0284c7',
-                900: '#0c4a6e',
-              }
-            },
-            cursor: {
-              'crosshair': 'crosshair',
-              'move': 'move',
-              'nwse-resize': 'nwse-resize',
-            }
-          }
-        }
-      }
-    </script>
-    <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TopDraw - Drawing App</title>
     <style>
-      /* Prevent pull-to-refresh on mobile */
-      body {
-        overscroll-behavior-y: contain;
-        touch-action: none;
-      }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background: #1a1a2e; 
+            display: flex; 
+            flex-direction: column; 
+            height: 100vh; 
+            font-family: Arial, sans-serif;
+        }
+        #toolbar { 
+            background: #16213e; 
+            padding: 10px; 
+            display: flex; 
+            gap: 10px; 
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        #toolbar button { 
+            padding: 8px 16px; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        #toolbar button:hover { transform: scale(1.05); }
+        #toolbar button.active { box-shadow: 0 0 10px currentColor; }
+        #canvas-container { 
+            flex: 1; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            padding: 20px;
+        }
+        canvas { 
+            background: #fff; 
+            border-radius: 10px; 
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            cursor: crosshair;
+        }
+        #color-picker { 
+            display: flex; 
+            gap: 5px; 
+            padding: 5px; 
+            background: #16213e; 
+            border-radius: 5px;
+        }
+        #color-picker input { 
+            width: 30px; 
+            height: 30px; 
+            border: none; 
+            cursor: pointer;
+        }
+        #clear-btn { 
+            background: #e94560; 
+            color: white; 
+            padding: 8px 16px; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            font-size: 14px;
+        }
+        #clear-btn:hover { background: #ff6b6b; }
     </style>
-
-<link rel="stylesheet" href="/index.css">
-  <script type="importmap">
-{
-  "imports": {
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
-    "react/": "https://esm.sh/react@^19.2.3/",
-    "react": "https://esm.sh/react@^19.2.3"
-  }
-}
-</script>
-  <script type="module" crossorigin src="/assets/index-BSWH0IdG.js"></script>
 </head>
-  <body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200">
-    <div id="root"></div>
+<body>
+    <div id="toolbar">
+        <div id="color-picker">
+            <input type="color" id="color1" value="#000000">
+            <input type="color" id="color2" value="#ff0000">
+            <input type="color" id="color3" value="#00ff00">
+            <input type="color" id="color4" value="#0000ff">
+            <input type="color" id="color5" value="#ffff00">
+        </div>
+        <button id="pen-btn" class="active" style="background:#ff6b6b;color:white;">Pen</button>
+        <button id="eraser-btn" style="background:#6b6bff;color:white;">Eraser</button>
+        <button id="clear-btn">Clear Canvas</button>
+        <button id="save-btn" style="background:#4ecdc4;color:white;">Save</button>
+    </div>
+    <div id="canvas-container">
+        <canvas id="drawing-canvas" width="800" height="500"></canvas>
+    </div>
+    <script>
+        const canvas = document.getElementById('drawing-canvas');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+        let currentTool = 'pen';
+        let currentColor = '#000000';
+        let currentSize = 5;
+        
+        function startPosition(e) {
+            isDrawing = true;
+            draw(e);
+        }
+        function endPosition() {
+            isDrawing = false;
+            ctx.beginPath();
+        }
+        function draw(e) {
+            if (!isDrawing) return;
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            ctx.lineWidth = currentSize;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = currentTool === 'eraser' ? '#ffffff' : currentColor;
+            
+            ctx.lineTo(x, y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+        }
+        
+        canvas.addEventListener('mousedown', startPosition);
+        canvas.addEventListener('mouseup', endPosition);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            startPosition(e.touches[0]);
+        });
+        canvas.addEventListener('touchend', endPosition);
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            draw(e.touches[0]);
+        });
+        
+        document.getElementById('pen-btn').addEventListener('click', () => {
+            currentTool = 'pen';
+            document.getElementById('pen-btn').classList.add('active');
+            document.getElementById('eraser-btn').classList.remove('active');
+        });
+        document.getElementById('eraser-btn').addEventListener('click', () => {
+            currentTool = 'eraser';
+            document.getElementById('eraser-btn').classList.add('active');
+            document.getElementById('pen-btn').classList.remove('active');
+        });
+        document.getElementById('clear-btn').addEventListener('click', () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        });
+        document.getElementById('save-btn').addEventListener('click', () => {
+            const link = document.createElement('a');
+            link.download = 'drawing.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        });
+        document.querySelectorAll('#color-picker input').forEach((input, index) => {
+            input.addEventListener('input', () => {
+                currentColor = input.value;
+            });
+        });
+    </script>
 </body>
 </html>
