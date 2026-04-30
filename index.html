@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Apps Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 0;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #00d4ff, #7b2cbf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.5)); }
+            50% { filter: drop-shadow(0 0 25px rgba(123, 44, 191, 0.5)); }
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #a0a0a0;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .app-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(0, 212, 255, 0.3);
+        }
+
+        .app-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .app-card:hover::before {
+            opacity: 1;
+        }
+
+        .app-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .app-card.pacman .app-icon {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+        }
+
+        .app-card.topdraw .app-icon {
+            background: linear-gradient(135deg, #4ecdc4, #44a08d);
+            color: white;
+        }
+
+        .app-card.placeholder .app-icon {
+            background: linear-gradient(135deg, #6c757d, #495057);
+            color: #adb5bd;
+        }
+
+        .app-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .app-desc {
+            color: #a0a0a0;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .app-link {
+            display: inline-block;
+            padding: 10px 25px;
+            background: linear-gradient(45deg, #00d4ff, #7b2cbf);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .app-link:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.4);
+        }
+
+        .app-link.pacman {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+        }
+
+        .app-link.topdraw {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+        }
+
+        .app-link.placeholder {
+            background: linear-gradient(45deg, #6c757d, #495057);
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .status-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-badge.active {
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+            border: 1px solid rgba(0, 255, 136, 0.3);
+        }
+
+        .status-badge.pending {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+            border: 1px solid rgba(255, 193, 7, 0.3);
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            margin-top: 60px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .subtitle { font-size: 1rem; }
+            .apps-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎮 My Apps Hub</h1>
+            <p class="subtitle">Explore my collection of web applications. Click on any app to launch it in a new window.</p>
+        </header>
+
+        <div class="apps-grid">
+            <!-- Pacman Game -->
+            <div class="app-card pacman">
+                <span class="status-badge active">Active</span>
+                <div class="app-icon">👻</div>
+                <h3 class="app-title">Pacman</h3>
+                <p class="app-desc">Classic arcade action! Eat dots, avoid ghosts, and become the ultimate Pacman champion.</p>
+                <a href="racing-game.html" class="app-link pacman" target="_blank">Play Now →</a>
+            </div>
+
+            <!-- TopDraw Drawing App -->
+            <div class="app-card topdraw">
+                <span class="status-badge active">Active</span>
+                <div class="app-icon">🎨</div>
+                <h3 class="app-title">TopDraw</h3>
+                <p class="app-desc">Create stunning digital artwork with our intuitive drawing tools. Save and share your masterpieces!</p>
+                <a href="topdraw.html" class="app-link topdraw" target="_blank">Open App →</a>
+            </div>
+
+            <!-- Placeholder 1 -->
+            <div class="app-card placeholder">
+                <span class="status-badge pending">Coming Soon</span>
+                <div class="app-icon">🚀</div>
+                <h3 class="app-title">App Coming Soon</h3>
+                <p class="app-desc">Something exciting is in the works. Check back later for updates!</p>
+                <a href="#" class="app-link placeholder">Notify Me</a>
+            </div>
+
+            <!-- Placeholder 2 -->
+            <div class="app-card placeholder">
+                <span class="status-badge pending">Coming Soon</span>
+                <div class="app-icon">📊</div>
+                <h3 class="app-title">Analytics Dashboard</h3>
+                <p class="app-desc">Track your progress and insights with our powerful analytics platform.</p>
+                <a href="#" class="app-link placeholder">Notify Me</a>
+            </div>
+
+            <!-- Placeholder 3 -->
+            <div class="app-card placeholder">
+                <span class="status-badge pending">Coming Soon</span>
+                <div class="app-icon">🎵</div>
+                <h3 class="app-title">Music Player</h3>
+                <p class="app-desc">Stream your favorite tracks with our custom music player application.</p>
+                <a href="#" class="app-link placeholder">Notify Me</a>
+            </div>
+
+            <!-- Placeholder 4 -->
+            <div class="app-card placeholder">
+                <span class="status-badge pending">Coming Soon</span>
+                <div class="app-icon">📱</div>
+                <h3 class="app-title">Mobile Companion</h3>
+                <p class="app-desc">A mobile-friendly companion app for all your devices.</p>
+                <a href="#" class="app-link placeholder">Notify Me</a>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2024 My Apps Hub. All rights reserved. | Built with ❤️ using vanilla HTML, CSS & JavaScript</p>
+        </footer>
+    </div>
+
+    <script>
+        // Add subtle floating animation to app cards
+        document.querySelectorAll('.app-card').forEach(card => {
+            card.style.animation = 'float 6s ease-in-out infinite';
+        });
+
+        // Add keyframe animation dynamically
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes float {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-8px); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Add click tracking (optional)
+        document.querySelectorAll('.app-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                if (!this.classList.contains('placeholder')) {
+                    console.log('App opened:', this.textContent.trim());
+                }
+            });
+        });
+    </script>
+</body>
+</html>
